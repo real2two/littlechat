@@ -19,3 +19,18 @@ The default port is "7319", but if you know how to code QB64, you know how to ma
 You are able to just send random messages with the host if you know how to code QB64, so only let your friends and/or people who trust be able to use it, no one else.
 
 # Client
+There is one client file in the folder "client". This is used to connect to the host/server.
+`client.bas` is the code and `client.exe` is the program.
+"settings.txt" will automaticly me regenerated if there is a issue.
+This should be the setup of `settings.txt`:
+```
+port of host
+ip of host
+image (leave blank for none)
+color code for text
+log chat or not (true/false)
+```
+
+# Hope you enjoy! :)
+If you need help, join https://discord.gg/hf6QRcw. (the official Discord chat)
+<iframe src="https://discordapp.com/widget?id=653413352063631391&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
