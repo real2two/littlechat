@@ -19,7 +19,7 @@ For `bot.js`, you need to manually configure `const token = ""` and `const chann
 Running any of the 2 host files will run the host. If you run it straight from the QB64 editor, you will get a console instead of a program, so you can scroll up and down and copy and paste, a feature that isn't currently working in the `.exe` program.
 
 The default port is `7319`, but if you have experience with QB64 and want to change it, it won't break anything so feel free.
-Please consider treaking the code for any proper blacklist/whitelist system if you don't want anyone to be able to access your chat server without permission. This is **not** included by default.
+Please consider tweaking the code for any proper blacklist/whitelist system if you don't want anyone to be able to access your chat server without permission. This is **not** included by default.
 
 ### Client
 There is one client file in the folder `client`. This is used to connect to the host/server.
