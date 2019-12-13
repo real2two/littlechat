@@ -33,4 +33,5 @@ log chat or not (true/false)
 
 # Hope you enjoy! :)
 If you need help, join https://discord.gg/hf6QRcw. (the official Discord chat)
+
 "https://discordapp.com/widget?id=653413352063631391&theme=dark"
