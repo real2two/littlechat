@@ -34,7 +34,7 @@ color code for text
 log chat or not (true/false)
 ```
 
-You can use [this]() configuration if you want to connect to our offical server.
+You can use [this]() configuration if you want to connect to our official server.
 
 ### Hope you enjoy! :)
 If you need help, join https://discord.gg/Raa5Wz (the official Discord chat). 
