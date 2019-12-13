@@ -15,3 +15,7 @@ For `bot.js`, you need to manually configure `const token = ""` and `const chann
 Running any of the 2 host files will run the host. If you run it straight from the QB64 editor, you will get a console instead of a program, so you can scroll up and down and copy and paste, which I wish I can make it work when you open just the exe program. (it doesn't work for some reason)
 
 The default port is "7319", but if you know how to code QB64, you know how to manually edit it.
+
+You are able to just send random messages with the host if you know how to code QB64, so only let your friends and/or people who trust be able to use it, no one else.
+
+# Client
