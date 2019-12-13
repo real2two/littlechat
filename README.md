@@ -1,5 +1,6 @@
 # Mini-Chat
 A chat program I'm making with QB64.
+*Noah, please don't break my code... or mess anything up.*
 
 # Disclaimers
 I do not take any responsiblities if your computer breaks or something while using the program. Logging the chat might take a lot of data.
