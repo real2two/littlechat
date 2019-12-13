@@ -1,5 +1,5 @@
-port
-ip
+port of host
+ip of host
 image (leave blank for none)
-color code
+color code for text
 log chat or not (true/false)
