@@ -1,12 +1,12 @@
-# Mini-Chat
+![](https://i.vgy.me/IcwEjs.png)
 A chat program I'm making with QB64.
 
 [![](https://flat.badgen.net/github/issues/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/stars/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/commits/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/last-commit/real2two/minichat)](https://github.com/real2two/minichat) [![Discord Chat](https://img.shields.io/discord/653413352063631391.svg?style=flat&logo=discord)](https://discord.gg/)
 
-# Disclaimers
+### Disclaimers
 I do not take any responsiblities if your computer breaks or something while using the program. Logging the chat might take a lot of data.
 
-# Host
+### Host
 There are 2 host files in the folder "host".
 `host.exe` (code: `host.bas`) and `discordhost.exe` (code: `discordhost.bas`).
 
@@ -20,7 +20,7 @@ The default port is "7319", but if you know how to code QB64, you know how to ma
 
 You are able to just send random messages with the host if you know how to code QB64, so only let your friends and/or people who trust be able to use it, no one else.
 
-# Client
+### Client
 There is one client file in the folder "client". This is used to connect to the host/server.
 `client.bas` is the code and `client.exe` is the program.
 "settings.txt" will automaticly me regenerated if there is a issue.
@@ -33,7 +33,7 @@ color code for text
 log chat or not (true/false)
 ```
 
-# Hope you enjoy! :)
+### Hope you enjoy! :)
 If you need help, join https://discord.gg/hf6QRcw (the official Discord chat). 
 
 
