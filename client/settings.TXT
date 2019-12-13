@@ -1,0 +1,5 @@
+port
+ip
+image (leave blank for none)
+color code
+log chat or not (true/false)
