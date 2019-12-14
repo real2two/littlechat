@@ -40,13 +40,3 @@ You can use [this](https://pastr.io/raw/KoGEtpSvb2A) configuration if you want t
 
 ### Hope you enjoy! :)
 If you need help, join https://discord.gg/Raa5Wz (the official Discord chat). 
-
-### Official Host/Server
-
-**Join the party!** 
-The first two lines of settings.txt is:
-```
-7319
-minichat.n4t.co
-```
-Make sure the color code doesn't contain "#".
