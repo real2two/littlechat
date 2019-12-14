@@ -1,5 +1,5 @@
 ![](https://i.vgy.me/IcwEjs.png)
-A chat program I'm making with QB64.
+A chat program I'm making with QB64. 
 
 [![](https://flat.badgen.net/github/issues/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/stars/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/commits/real2two/minichat)](https://github.com/real2two/minichat) [![](https://flat.badgen.net/github/last-commit/real2two/minichat)](https://github.com/real2two/minichat) [![Discord Chat](https://img.shields.io/discord/653413352063631391.svg?style=flat&logo=discord)](https://discord.gg/)
 
