@@ -1,4 +1,4 @@
-![](https://i.vgy.me/IcwEjs.png)
+![](https://i.ibb.co/kyFgjpj/68747470733a2f2f692e7667792e6d652f496377456a732e706e67-1.png)
 A chat program I'm making with QB64. 
 
 ------
