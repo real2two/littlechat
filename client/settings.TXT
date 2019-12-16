@@ -1,5 +1,7 @@
 port of host
 ip of host
-image (leave blank for none)
-color code for text
+background image (leave blank for none)
+icon image (leave blank for none)
+foreground color code for text
+background color code for text (leave blank for none)
 log chat or not (true/false)
