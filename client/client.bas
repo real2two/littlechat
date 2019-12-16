@@ -41,8 +41,8 @@ IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     LINE INPUT #1, iconimg$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, fgcolor$
-    'IF EOF(1) THEN CLOSE #1: GOTO resetSettings
-    'LINE INPUT #1, bgcolor$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, bgcolor$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, log$
     CLOSE #1 ' Close the file.
@@ -53,7 +53,7 @@ ELSE
     image$ = ""
     iconimg$ = ""
     fgcolor$ = "FFFFFF"
-    'bgcolor$ = ""
+    bgcolor$ = ""
     log$ = "false"
     OPEN "settings.txt" FOR OUTPUT AS #1 ' Write Settings
     PRINT #1, port$ ' Sets the first line of "settings.txt" as port$
@@ -61,7 +61,7 @@ ELSE
     PRINT #1, image$
     PRINT #1, iconimg$
     PRINT #1, fgcolor$
-    'PRINT #1, bgcolor$
+    PRINT #1, bgcolor$
     PRINT #1, log$
     CLOSE #1 ' Close the file.
 END IF
@@ -84,13 +84,13 @@ IF iconimg$ <> "" THEN
     _FREEIMAGE iconimg&
 END IF
 
-'IF bgcolor$ <> "" THEN
-'    _PRINTMODE _KEEPBACKGROUND
-'    COLOR VAL("&HFF" + fgcolor$), VAL("&HFF" + bgcolor$)
-'ELSE
-_PRINTMODE _FILLBACKGROUND
-COLOR VAL("&HFF" + fgcolor$)
-'END IF
+IF bgcolor$ <> "" THEN
+    _PRINTMODE _FILLBACKGROUND
+    COLOR VAL("&HFF" + fgcolor$), VAL("&HFF" + bgcolor$)
+ELSE
+    _PRINTMODE _KEEPBACKGROUND
+    COLOR VAL("&HFF" + fgcolor$)
+END IF
 
 1
 CLS
