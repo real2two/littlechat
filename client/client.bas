@@ -1,5 +1,24 @@
 RESET
 
+IF _COMMANDCOUNT <> 0 THEN
+    IF _COMMANDCOUNT = 1 THEN
+        IF COMMAND$(1) = "help" THEN
+            SCREEN _NEWIMAGE(550, 100, 32)
+            COLOR &HFFFFFFFF
+            _TITLE "Mini-Chat Help"
+            PRINT CHR$(34) + "/help" + CHR$(34) + " - The help command."
+            PRINT CHR$(34) + "/say" + CHR$(34) + " - Send a message."
+            PRINT CHR$(34) + "/nick" + CHR$(34) + " - Change your username/nickname."
+            PRINT CHR$(34) + "/clipboard" + CHR$(34) + " - Send your clipboard to the chat. (you can Ctrl-V too)"
+            _DISPLAY
+            SLEEP
+            SYSTEM
+        END IF
+    END IF
+END IF
+
+$EXEICON:'.\icon.ico'
+
 lines = 0
 
 DIM SHARED lines$(24)
@@ -19,7 +38,11 @@ IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, image$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
-    LINE INPUT #1, color$
+    LINE INPUT #1, iconimg$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, fgcolor$
+    'IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    'LINE INPUT #1, bgcolor$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, log$
     CLOSE #1 ' Close the file.
@@ -28,13 +51,17 @@ ELSE
     port$ = "7319" ' Default Port
     ip$ = "localhost" ' Default IP
     image$ = ""
-    color$ = "FFFFFF"
+    iconimg$ = ""
+    fgcolor$ = "FFFFFF"
+    'bgcolor$ = ""
     log$ = "false"
     OPEN "settings.txt" FOR OUTPUT AS #1 ' Write Settings
     PRINT #1, port$ ' Sets the first line of "settings.txt" as port$
     PRINT #1, ip$ ' Sets the second line of "settings.txt" as ip$
     PRINT #1, image$
-    PRINT #1, color$
+    PRINT #1, iconimg$
+    PRINT #1, fgcolor$
+    'PRINT #1, bgcolor$
     PRINT #1, log$
     CLOSE #1 ' Close the file.
 END IF
@@ -48,9 +75,22 @@ IF image$ <> "" THEN
     END IF
 END IF
 
+IF iconimg$ <> "" THEN
+    iconimg& = _LOADIMAGE(iconimg$, 32)
+    IF iconimg& < -1 THEN
+        _ICON iconimg&
+    ELSE SYSTEM
+    END IF
+    _FREEIMAGE iconimg&
+END IF
 
-COLOR VAL("&HFF" + color$)
-_PRINTMODE _KEEPBACKGROUND
+'IF bgcolor$ <> "" THEN
+'    _PRINTMODE _KEEPBACKGROUND
+'    COLOR VAL("&HFF" + fgcolor$), VAL("&HFF" + bgcolor$)
+'ELSE
+_PRINTMODE _FILLBACKGROUND
+COLOR VAL("&HFF" + fgcolor$)
+'END IF
 
 1
 CLS
@@ -95,7 +135,7 @@ IF client THEN
             k$ = ""
             k$ = INKEY$
 
-            IF k$ <> "" THEN
+            IF LEN(k$) = 1 THEN
                 code = ASC(k$)
                 IF code = 22 THEN
                     send$ = send$ + _CLIPBOARD$
@@ -106,6 +146,11 @@ IF client THEN
                 ELSEIF code = 13 THEN
                     IF send$ <> "" THEN
                         IF LEFT$(send$, 5) = "/say " THEN send$ = RIGHT$(send$, LEN(send$) - 5): GOTO send
+                        IF send$ = "/help" THEN
+                            SHELL _DONTWAIT "client.exe help"
+                            send$ = ""
+                            GOTO endLoop
+                        END IF
                         IF LEFT$(send$, 6) = "/nick " THEN
                             oldusername$ = username$
                             IF LEFT$(RIGHT$(send$, LEN(send$) - 6), 10) <> RIGHT$(send$, LEN(send$) - 6) THEN GOTO send
@@ -125,8 +170,10 @@ IF client THEN
                         END IF
                     END IF
                 ELSEIF code = 32 THEN
-                    IF LEN(username$ + ": " + send$) <= 69 THEN
-                        send$ = send$ + " "
+                    IF LEN(send$) <> 0 THEN
+                        IF LEN(username$ + ": " + send$) <= 69 THEN
+                            send$ = send$ + " "
+                        END IF
                     END IF
                 ELSE
                     IF LEN(username$ + ": " + send$) <= 69 THEN
@@ -135,6 +182,7 @@ IF client THEN
                 END IF
             END IF
             endLoop:
+            illegalCharacters send$
 
             CLS
             IF image$ = "" THEN
@@ -197,3 +245,20 @@ SUB loopUntil (text$, until$, new$)
         done = 0
     END IF
 END SUB
+
+SUB illegalCharacters (inputcode$)
+    done = 0
+    text$ = ""
+    test1$ = inputcode$
+    test$ = LCASE$(inputcode$)
+    DO
+        IF LEFT$(test$, 1) = " " OR LEFT$(test$, 1) = "a" OR LEFT$(test$, 1) = "b" OR LEFT$(test$, 1) = "c" OR LEFT$(test$, 1) = "d" OR LEFT$(test$, 1) = "e" OR LEFT$(test$, 1) = "f" OR LEFT$(test$, 1) = "g" OR LEFT$(test$, 1) = "h" OR LEFT$(test$, 1) = "i" OR LEFT$(test$, 1) = "j" OR LEFT$(test$, 1) = "k" OR LEFT$(test$, 1) = "l" OR LEFT$(test$, 1) = "m" OR LEFT$(test$, 1) = "n" OR LEFT$(test$, 1) = "o" OR LEFT$(test$, 1) = "p" OR LEFT$(test$, 1) = "q" OR LEFT$(test$, 1) = "r" OR LEFT$(test$, 1) = "s" OR LEFT$(test$, 1) = "t" OR LEFT$(test$, 1) = "u" OR LEFT$(test$, 1) = "v" OR LEFT$(test$, 1) = "w" OR LEFT$(test$, 1) = "x" OR LEFT$(test$, 1) = "y" OR LEFT$(test$, 1) = "z" OR LEFT$(test$, 1) = "1" OR LEFT$(test$, 1) = "2" OR LEFT$(test$, 1) = "3" OR LEFT$(test$, 1) = "4" OR LEFT$(test$, 1) = "5" OR LEFT$(test$, 1) = "6" OR LEFT$(test$, 1) = "7" OR LEFT$(test$, 1) = "8" OR LEFT$(test$, 1) = "9" OR LEFT$(test$, 1) = "0" OR LEFT$(test$, 1) = "`" OR LEFT$(test$, 1) = "~" OR LEFT$(test$, 1) = "!" OR LEFT$(test$, 1) = "@" OR LEFT$(test$, 1) = "#" OR LEFT$(test$, 1) = "$" OR LEFT$(test$, 1) = "%" OR LEFT$(test$, 1) = "^" OR LEFT$(test$, 1) = "&" OR LEFT$(test$, 1) = "*" OR LEFT$(test$, 1) = "(" OR LEFT$(test$, 1) = ")" OR LEFT$(test$, 1) = "-" OR LEFT$(test$, 1) = "_" OR LEFT$(test$, 1) = "+" OR LEFT$(test$, 1) = "=" OR LEFT$(test$, 1) = "[" OR LEFT$(test$, 1) = "{" OR LEFT$(test$, 1) = "]" OR LEFT$(test$, 1) = "}" OR LEFT$(test$, 1) = "|" OR LEFT$(test$, 1) = "\" OR LEFT$(test$, 1) = ";" OR LEFT$(test$, 1) = ":" OR LEFT$(test$, 1) = "'" OR LEFT$(test$, 1) = "<" OR LEFT$(test$, 1) = "," OR LEFT$(test$, 1) = ">" OR LEFT$(test$, 1) = "." OR LEFT$(test$, 1) = "?" OR LEFT$(test$, 1) = "/" OR LEFT$(test$, 1) = CHR$(34) THEN
+            text$ = text$ + LEFT$(test1$, 1)
+        END IF
+        test$ = RIGHT$(test$, LEN(test$) - 1)
+        test1$ = RIGHT$(test1$, LEN(test1$) - 1)
+        IF test$ = "" THEN done = 1
+    LOOP UNTIL done = 1
+    inputcode$ = text$
+END SUB
+

@@ -1,0 +1,6 @@
+port (default: 7319)
+ip (default: localhost)
+background image file
+icon image file (to set a custom one)
+foreground text color (hex html color code without "#" in the front)
+log the chat? (true/false)

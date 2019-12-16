@@ -1,0 +1,5 @@
+port (default: 7319)
+max connections allowed (default: 10)
+log the chat? (true/false) (default: false)
+disallow connections from an already connected ip? (true/false) ("true" = you won't be able to join 2 connections in one computer, yet disabling this option to "false" will allow you to use programs like ngrok, because ngrok hides the ips)
+show the user number to clients? (true/false) ("true" means the chat would be like "# | <client text>" and "false" would just be "<client text>")
