@@ -4,9 +4,9 @@ RESET
 
 '_DEST _CONSOLE
 
-'_CONSOLETITLE "Mini-Chat Host"
+'_CONSOLETITLE "LittleChat Host"
 
-_TITLE "Mini-Chat Host" ' Shows the title of the progsram.
+_TITLE "LittleChat Host" ' Shows the title of the progsram.
 
 IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     OPEN "settings.txt" FOR INPUT AS #1 ' Open File
@@ -136,7 +136,7 @@ IF host THEN
         endToggleLoop:
 
         'IF kick$ = "true" THEN
-        '    _TITLE "Who should I kick: no." + kickmsg$
+        '    _TITLE "LittleChat | Who should I kick: no." + kickmsg$
         'END IF
 
         ' Player Count + Leave Client
@@ -160,7 +160,7 @@ IF host THEN
         LOOP UNTIL loopnum >= maxplayers
 
         IF kick$ = "false" THEN
-            _TITLE "Connections: " + _TRIM$(STR$(playercount)) + "/" + _TRIM$(STR$(maxplayers)) + " | Join: " + join$
+            _TITLE "LittleChat | Connections: " + _TRIM$(STR$(playercount)) + "/" + _TRIM$(STR$(maxplayers)) + " | Join: " + join$
         END IF
 
         '_DELAY 0.005
@@ -293,7 +293,7 @@ IF host THEN
                             loopnum1 = loopnum1 + 1
                             IF connection&(loopnum1) THEN ' If the connection handle exists.
                                 IF connection&(loopnum1) <> 0 THEN
-                                    IF _CONNECTED(connection&(loopnum)) THEN ' If someone is connected in the connection handle.
+                                    IF _CONNECTED(connection&(loopnum1)) THEN ' If someone is connected in the connection handle.
                                         PUT connection&(loopnum1), , output$
                                     END IF
                                 END IF

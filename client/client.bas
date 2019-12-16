@@ -5,7 +5,7 @@ IF _COMMANDCOUNT <> 0 THEN
         IF COMMAND$(1) = "help" THEN
             SCREEN _NEWIMAGE(550, 100, 32)
             COLOR &HFFFFFFFF
-            _TITLE "Mini-Chat Help"
+            _TITLE "LittleChat Help"
             PRINT CHR$(34) + "/help" + CHR$(34) + " - The help command."
             PRINT CHR$(34) + "/say" + CHR$(34) + " - Send a message."
             PRINT CHR$(34) + "/nick" + CHR$(34) + " - Change your username/nickname."
@@ -24,7 +24,7 @@ lines = 0
 DIM SHARED lines$(24)
 DIM SHARED newlines$(24)
 
-_TITLE "Mini-Chat"
+_TITLE "LittleChat"
 send$ = ""
 
 SCREEN _NEWIMAGE(639, 400, 32)
