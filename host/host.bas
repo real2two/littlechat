@@ -20,6 +20,16 @@ IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     LINE INPUT #1, antidoubleip$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, usernotest$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, discord$
+    IF discord$ = "true" THEN
+        IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+        LINE INPUT #1, discord.token$
+        IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+        LINE INPUT #1, discord.botid$
+        IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+        LINE INPUT #1, discord.channelid$
+    END IF
     CLOSE #1 ' Close the file.
 ELSE
     resetSettings: ' Reset Settings On Error
@@ -28,18 +38,24 @@ ELSE
     log$ = "false"
     antidoubleip$ = "false"
     usernotest$ = "true"
+    discord$ = "false"
+    discord.token$ = ""
+    discord.channelid$ = ""
+    discord.botid$ = ""
     OPEN "settings.txt" FOR OUTPUT AS #1 ' Write Settings
     PRINT #1, port$
     PRINT #1, maxplayers$
     PRINT #1, log$
     PRINT #1, antidoubleip$
     PRINT #1, usernotest$
+    PRINT #1, discord$
     CLOSE #1 ' Close the file.
 END IF
 
 IF log$ <> "true" AND log$ <> "false" GOTO resetSettings
 IF antidoubleip$ <> "true" AND antidoubleip$ <> "false" GOTO resetSettings
 IF usernotest$ <> "true" AND usernotest$ <> "false" GOTO resetSettings
+IF discord$ <> "true" AND discord$ <> "false" GOTO resetSettings
 
 maxplayers = VAL(maxplayers$)
 IF maxplayers <= 0 GOTO resetSettings
@@ -47,6 +63,7 @@ port = VAL(port$)
 IF port <= 0 GOTO resetSettings
 
 join$ = "true"
+olddiscordmsg$ = ""
 'illegal1$ = CHR$(13)
 'illegal2$ = CHR$(10)
 
@@ -63,13 +80,86 @@ END IF
 kick$ = "false"
 
 IF host THEN
+    IF _FILEEXISTS("send.txt") THEN
+        KILL "send.txt"
+    END IF
     IF log$ = "true" THEN
         OPEN "log.txt" FOR APPEND AS #1
         PRINT #1, ""
         PRINT #1, "# host started at " + _TRIM$(TIME$) + "#"
         PRINT #1, ""
     END IF
+
     PRINT "Host is ready!"
+    IF log$ = "true" THEN
+        PRINT #1, "Host is ready!"
+    END IF
+
+    IF discord$ = "true" THEN
+        IF discord.token$ <> "" AND discord.channelid$ <> "" AND discord.botid$ <> "" THEN
+            PRINT "Generating bot.js (if you don't have node.js, the Discord option won't work)"
+            IF log$ = "true" THEN
+                PRINT #1, "Generating bot.js (if you don't have node.js, the Discord option won't work)"
+            END IF
+            OPEN "bot.js" FOR OUTPUT AS #1
+            PRINT #1, "const fs = require('fs');"
+            PRINT #1, "const Discord = require('discord.js');"
+            PRINT #1, "const client = new Discord.Client();"
+            PRINT #1, "const token = '" + discord.token$ + "';"
+            PRINT #1, "const channelid = '" + _TRIM$(STR$(VAL(discord.channelid$))) + "';"
+            PRINT #1, "const botid = '" + _TRIM$(STR$(VAL(discord.botid$))) + "';"
+            PRINT #1, "client.on('ready', () => {"
+            PRINT #1, "  console.log('Bot is ready!');"
+            PRINT #1, "  client.user.setActivity('people chat.', { type: 'WATCHING'});"
+            PRINT #1, "  newone(client);"
+            PRINT #1, "})"
+            PRINT #1, "client.on('message', message => {"
+            PRINT #1, "  try {"
+            PRINT #1, "    if (message.author.id === botid) return;"
+            PRINT #1, "    if (message.channel.id === channelid) {"
+            PRINT #1, "      message.delete();"
+            PRINT #1, "      fs.writeFile('send.txt', 'Discord | ' + message.member.user.tag.toString() + ' | ' + message.content.toString(), function(err) {"
+            PRINT #1, "      if (err) throw err;"
+            PRINT #1, "      });"
+            PRINT #1, "    }"
+            PRINT #1, "  } catch(err) {"
+            PRINT #1, "    console.log(err);"
+            PRINT #1, "  }"
+            PRINT #1, "});"
+            PRINT #1, "function newone(client) {"
+            PRINT #1, "  if (fs.existsSync('data.txt')) {"
+            PRINT #1, "    msg = fs.readFileSync('data.txt').toString();"
+            PRINT #1, "    fs.unlink('data.txt', function (err) {"
+            PRINT #1, "    if (err) throw err;"
+            PRINT #1, "    });"
+            PRINT #1, "    const embed = new Discord.RichEmbed()"
+            PRINT #1, "      .setColor('RANDOM')"
+            PRINT #1, "      .setDescription(msg)"
+            PRINT #1, "    client.channels.get(channelid).send(embed);"
+            PRINT #1, "  }"
+            PRINT #1, "  setTimeout(function(){"
+            PRINT #1, "    newone(client);"
+            PRINT #1, "  }, 1000)"
+            PRINT #1, "}"
+            PRINT #1, "client.login(token)"
+            CLOSE #1
+            IF _DIREXISTS(".\node_modules\discord.js") THEN
+            ELSE
+                PRINT "Trying to install the npm discord.js. (could not detect npm)"
+                IF log$ = "true" THEN
+                    PRINT #1, "Trying to install the npm discord.js. (could not detect npm)"
+                END IF
+                SHELL "npm install discord.js"
+            END IF
+            PRINT "Trying to turn on the Discord bot. (This opens an external program.)"
+            IF log$ = "true" THEN
+                PRINT #1, "Trying to turn on the Discord bot. (This opens an external program.)"
+            END IF
+            SHELL _DONTWAIT "node bot.js"
+        ELSE GOTO resetSettings
+        END IF
+    END IF
+
     DO
         ' Close the program.
         IF _EXIT THEN
@@ -136,7 +226,7 @@ IF host THEN
         endToggleLoop:
 
         'IF kick$ = "true" THEN
-        '    _TITLE "LittleChat | Who should I kick: no." + kickmsg$
+        '    _TITLE "Who should I kick: no." + kickmsg$
         'END IF
 
         ' Player Count + Leave Client
@@ -160,7 +250,7 @@ IF host THEN
         LOOP UNTIL loopnum >= maxplayers
 
         IF kick$ = "false" THEN
-            _TITLE "LittleChat | Connections: " + _TRIM$(STR$(playercount)) + "/" + _TRIM$(STR$(maxplayers)) + " | Join: " + join$
+            _TITLE "Connections: " + _TRIM$(STR$(playercount)) + "/" + _TRIM$(STR$(maxplayers)) + " | Join: " + join$
         END IF
 
         '_DELAY 0.005
@@ -288,12 +378,15 @@ IF host THEN
                         IF usernotest$ = "true" THEN
                             output$ = _TRIM$(STR$(loopnum)) + " | " + output$
                         END IF
+                        OPEN "data.txt" FOR OUTPUT AS #2
+                        PRINT #2, output$
+                        CLOSE #2
                         loopnum1 = 0
                         DO
                             loopnum1 = loopnum1 + 1
                             IF connection&(loopnum1) THEN ' If the connection handle exists.
                                 IF connection&(loopnum1) <> 0 THEN
-                                    IF _CONNECTED(connection&(loopnum1)) THEN ' If someone is connected in the connection handle.
+                                    IF _CONNECTED(connection&(loopnum)) THEN ' If someone is connected in the connection handle.
                                         PUT connection&(loopnum1), , output$
                                     END IF
                                 END IF
@@ -307,6 +400,38 @@ IF host THEN
         loopnum = 0
 
         '_DELAY 0.005
+
+        IF _FILEEXISTS("send.txt") THEN
+            discordmsg$ = ""
+            OPEN "send.txt" FOR INPUT AS #2
+            IF EOF(2) THEN CLOSE #2: GOTO endSend
+            LINE INPUT #2, discordmsg$
+            CLOSE #2
+            discordmsg$ = _TRIM$(LEFT$(_TRIM$(discordmsg$), 69))
+            IF discordmsg$ <> olddiscordmsg$ THEN
+                olddiscordmsg$ = discordmsg$
+                output$ = discordmsg$
+                PRINT output$
+                IF log$ = "true" THEN
+                    PRINT #1, output$
+                END IF
+                OPEN "data.txt" FOR OUTPUT AS #2
+                PRINT #2, output$
+                CLOSE #2
+                loopnum1 = 0
+                DO
+                    loopnum1 = loopnum1 + 1
+                    IF connection&(loopnum1) THEN ' If the connection handle exists.
+                        IF connection&(loopnum1) <> 0 THEN
+                            IF _CONNECTED(connection&(loopnum1)) THEN ' If someone is connected in the connection handle.
+                                PUT connection&(loopnum1), , output$
+                            END IF
+                        END IF
+                    END IF
+                LOOP UNTIL loopnum1 >= maxplayers
+            END IF
+        END IF
+        endSend:
     LOOP
 END IF
 SYSTEM
