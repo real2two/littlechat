@@ -338,7 +338,6 @@ IF host THEN
         ' Input Clients
         loopnum = 0
         DO
-            resetInputLoop:
             '_DELAY 0.05
             loopnum = loopnum + 1
             IF connection&(loopnum) <> 0 THEN
@@ -365,7 +364,7 @@ IF host THEN
                             CLOSE #2
                         END IF
                         skipbanwords:
-                        IF output$ = lastmsg$(loopnum) GOTO endSendLoop
+                        IF output$ = lastmsg$(loopnum) GOTO resetInputLoop
                         'Replace output$, illegal1$, "?"
                         'Replace output$, illegal2$, "?"
                         illegalCharacters output$
@@ -395,8 +394,8 @@ IF host THEN
                     END IF
                 END IF
             END IF
+            resetInputLoop:
         LOOP UNTIL loopnum >= maxplayers
-        endSendLoop:
         loopnum = 0
 
         '_DELAY 0.005
