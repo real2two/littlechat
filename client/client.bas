@@ -1,15 +1,22 @@
+resetClient:
+CLS
 RESET
+
+'SHELL _DONTWAIT "rundll32 url.dll,FileProtocolHandler https://www.google.com"'
 
 IF _COMMANDCOUNT <> 0 THEN
     IF _COMMANDCOUNT = 1 THEN
         IF COMMAND$(1) = "help" THEN
             SCREEN _NEWIMAGE(550, 100, 32)
+            _PRINTMODE _FILLBACKGROUND
             COLOR &HFFFFFFFF
             _TITLE "LittleChat Help"
-            PRINT CHR$(34) + "/help" + CHR$(34) + " - The help command."
-            PRINT CHR$(34) + "/say" + CHR$(34) + " - Send a message."
-            PRINT CHR$(34) + "/nick" + CHR$(34) + " - Change your username/nickname."
-            PRINT CHR$(34) + "/clipboard" + CHR$(34) + " - Send your clipboard to the chat. (you can Ctrl-V too)"
+            _PRINTSTRING (0, 0), CHR$(34) + "/help" + CHR$(34) + " - The help command."
+            _PRINTSTRING (0, 15), CHR$(34) + "/say" + CHR$(34) + " - Send a message."
+            _PRINTSTRING (0, 30), CHR$(34) + "/nick" + CHR$(34) + " - Change your username/nickname."
+            _PRINTSTRING (0, 45), CHR$(34) + "/clipboard" + CHR$(34) + " - Send your clipboard to the chat. (you can Ctrl-V too)"
+            _PRINTSTRING (0, 60), CHR$(34) + "/raw" + CHR$(34) + " - Send a raw message."
+            _PRINTSTRING (0, 75), CHR$(34) + "/disconnect" + CHR$(34) + " - Disconnects from the server you are currently in."
             _DISPLAY
             SLEEP
             SYSTEM
@@ -32,9 +39,11 @@ SCREEN _NEWIMAGE(639, 400, 32)
 IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     OPEN "settings.txt" FOR INPUT AS #1 ' Open File
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings ' (will be repeated) Reset settings if there is a error.
-    LINE INPUT #1, port$ ' First line of "settings.txt" is the port of the game you join.
+    LINE INPUT #1, username$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
-    LINE INPUT #1, ip$ ' Second line of "settings.txt" is the ip of the game you join.
+    LINE INPUT #1, port$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, ip$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, image$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
@@ -44,29 +53,43 @@ IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, bgcolor$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, sound$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, log$
     CLOSE #1 ' Close the file.
 ELSE
     resetSettings: ' Reset Settings On Error
+    username$ = "Guest"
     port$ = "7319" ' Default Port
     ip$ = "localhost" ' Default IP
     image$ = ""
     iconimg$ = ""
     fgcolor$ = "FFFFFF"
     bgcolor$ = ""
+    sound$ = ""
     log$ = "false"
     OPEN "settings.txt" FOR OUTPUT AS #1 ' Write Settings
+    PRINT #1, username$
     PRINT #1, port$ ' Sets the first line of "settings.txt" as port$
     PRINT #1, ip$ ' Sets the second line of "settings.txt" as ip$
     PRINT #1, image$
     PRINT #1, iconimg$
     PRINT #1, fgcolor$
     PRINT #1, bgcolor$
+    PRINT #1, sound$
     PRINT #1, log$
     CLOSE #1 ' Close the file.
 END IF
 
 IF log$ <> "true" AND log$ <> "false" GOTO resetSettings
+
+IF sound$ <> "" THEN
+    playsound& = _SNDOPEN(sound$)
+    IF playsound& = 0 THEN SYSTEM
+END IF
+
+IF username$ = "" GOTO resetSettings
+IF LEN(username$) >= 10 GOTO resetSettings
 
 IF image$ <> "" THEN
     image& = _LOADIMAGE(image$, 32)
@@ -93,17 +116,6 @@ ELSE
 END IF
 
 1
-CLS
-IF image$ = "" THEN
-ELSE
-    _PUTIMAGE (0, 0), image&
-END IF
-
-LINE INPUT "What is your username: ", username$
-IF username$ = "" GOTO 1
-IF LEN(username$) >= 10 GOTO 1
-CLS
-
 IF image$ = "" THEN
 ELSE
     _PUTIMAGE (0, 0), image&
@@ -145,7 +157,9 @@ IF client THEN
                     send$ = LEFT$(send$, LEN(send$) - 1)
                 ELSEIF code = 13 THEN
                     IF send$ <> "" THEN
+                        IF send$ = "/disconnect" GOTO resetClient
                         IF LEFT$(send$, 5) = "/say " THEN send$ = RIGHT$(send$, LEN(send$) - 5): GOTO send
+                        IF LEFT$(send$, 5) = "/raw " THEN send$ = RIGHT$(send$, LEN(send$) - 5): GOTO send1
                         IF send$ = "/help" THEN
                             SHELL _DONTWAIT "client.exe help"
                             send$ = ""
@@ -165,6 +179,7 @@ IF client THEN
                             END IF
                             send:
                             send$ = username$ + ": " + send$
+                            send1:
                             PUT client, , send$
                             send$ = ""
                         END IF
@@ -206,6 +221,9 @@ IF client THEN
                     loopnum = loopnum + 1
                     lines$(loopnum) = newlines$(loopnum)
                 LOOP UNTIL loopnum >= 23
+                IF sound$ <> "" THEN
+                    _SNDPLAY playsound&
+                END IF
             END IF
             loopnum = 0
             DO
