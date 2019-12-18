@@ -386,7 +386,7 @@ IF host THEN
                             loopnum1 = loopnum1 + 1
                             IF connection&(loopnum1) THEN ' If the connection handle exists.
                                 IF connection&(loopnum1) <> 0 THEN
-                                    IF _CONNECTED(connection&(loopnum)) THEN ' If someone is connected in the connection handle.
+                                    IF _CONNECTED(connection&(loopnum1)) THEN ' If someone is connected in the connection handle.
                                         PUT connection&(loopnum1), , output$
                                     END IF
                                 END IF
