@@ -2,6 +2,13 @@ resetClient:
 CLS
 RESET
 
+$VERSIONINFO:CompanyName='LittleChat
+$VERSIONINFO:FileDescription='A little chat program made with QB64.
+$VERSIONINFO:InternalName='LittleChat Client
+$VERSIONINFO:ProductName='LittleChat Client
+$VERSIONINFO:Comments='This program is licensed with a MIT license.
+$VERSIONINFO:FILEVERSION#=0,1,0,0
+
 'SHELL _DONTWAIT "rundll32 url.dll,FileProtocolHandler https://www.google.com"'
 
 IF _COMMANDCOUNT <> 0 THEN
