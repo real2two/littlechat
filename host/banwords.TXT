@@ -1,3 +1,0 @@
-add banned words here
-another banned word
-this can go on and on but too much might cause lag
