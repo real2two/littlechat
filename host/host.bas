@@ -6,6 +6,13 @@ RESET
 
 '_CONSOLETITLE "LittleChat Host"
 
+$VERSIONINFO:CompanyName='LittleChat
+$VERSIONINFO:FileDescription='Create a server for the chat program LittleChat.
+$VERSIONINFO:InternalName='LittleChat Host
+$VERSIONINFO:ProductName='LittleChat Host
+$VERSIONINFO:Comments='This program is licensed with a MIT license.
+$VERSIONINFO:FILEVERSION#=0,1,0,0
+
 _TITLE "LittleChat Host" ' Shows the title of the progsram.
 
 IF _FILEEXISTS("settings.txt") THEN ' Read Settings
