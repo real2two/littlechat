@@ -23,4 +23,4 @@ minichat.n4t.co
 If it doesn't work, it probably means the server/host is down, contains the max amount of users or you are ip banned.
 
 ### Discord
-If you need help, join our Discord server [here](https://discord.gg/Raa5Wz).
+If you need help, join our Discord server [here](https://discord.gg/T3qS4Y4).
