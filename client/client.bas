@@ -1,4 +1,4 @@
-resetClient:
+
 CLS
 RESET
 
@@ -7,7 +7,7 @@ $VERSIONINFO:FileDescription='A little chat program made with QB64.
 $VERSIONINFO:InternalName='LittleChat Client
 $VERSIONINFO:ProductName='LittleChat Client
 $VERSIONINFO:Comments='This program is licensed with a MIT license.
-$VERSIONINFO:FILEVERSION#=0,1,0,0
+$VERSIONINFO:FILEVERSION#=0,1,1,0
 
 'SHELL _DONTWAIT "rundll32 url.dll,FileProtocolHandler https://www.google.com"'
 
@@ -23,7 +23,7 @@ IF _COMMANDCOUNT <> 0 THEN
             _PRINTSTRING (0, 30), CHR$(34) + "/nick" + CHR$(34) + " - Change your username/nickname."
             _PRINTSTRING (0, 45), CHR$(34) + "/clipboard" + CHR$(34) + " - Send your clipboard to the chat. (you can Ctrl-V too)"
             _PRINTSTRING (0, 60), CHR$(34) + "/raw" + CHR$(34) + " - Send a raw message."
-            _PRINTSTRING (0, 75), CHR$(34) + "/disconnect" + CHR$(34) + " - Disconnects from the server you are currently in."
+            '_PRINTSTRING (0, 75), CHR$(34) + "/disconnect" + CHR$(34) + " - Disconnects from the server you are currently in."
             _DISPLAY
             SLEEP
             SYSTEM
@@ -164,7 +164,7 @@ IF client THEN
                     send$ = LEFT$(send$, LEN(send$) - 1)
                 ELSEIF code = 13 THEN
                     IF send$ <> "" THEN
-                        IF send$ = "/disconnect" GOTO resetClient
+                        'IF send$ = "/disconnect" GOTO resetClient
                         IF LEFT$(send$, 5) = "/say " THEN send$ = RIGHT$(send$, LEN(send$) - 5): GOTO send
                         IF LEFT$(send$, 5) = "/raw " THEN send$ = RIGHT$(send$, LEN(send$) - 5): GOTO send1
                         IF send$ = "/help" THEN
