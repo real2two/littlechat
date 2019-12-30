@@ -28,6 +28,8 @@ IF _FILEEXISTS("settings.txt") THEN ' Read Settings
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, usernotest$
     IF EOF(1) THEN CLOSE #1: GOTO resetSettings
+    LINE INPUT #1, web$
+    IF EOF(1) THEN CLOSE #1: GOTO resetSettings
     LINE INPUT #1, discord$
     IF discord$ = "true" THEN
         IF EOF(1) THEN CLOSE #1: GOTO resetSettings
@@ -45,6 +47,7 @@ ELSE
     log$ = "false"
     antidoubleip$ = "false"
     usernotest$ = "true"
+    web$ = "false"
     discord$ = "false"
     discord.token$ = ""
     discord.channelid$ = ""
@@ -55,6 +58,7 @@ ELSE
     PRINT #1, log$
     PRINT #1, antidoubleip$
     PRINT #1, usernotest$
+    PRINT #1, web$
     PRINT #1, discord$
     CLOSE #1 ' Close the file.
 END IF
@@ -63,6 +67,7 @@ IF log$ <> "true" AND log$ <> "false" GOTO resetSettings
 IF antidoubleip$ <> "true" AND antidoubleip$ <> "false" GOTO resetSettings
 IF usernotest$ <> "true" AND usernotest$ <> "false" GOTO resetSettings
 IF discord$ <> "true" AND discord$ <> "false" GOTO resetSettings
+IF web$ <> "true" AND web$ <> "false" GOTO resetSettings
 
 maxplayers = VAL(maxplayers$)
 IF maxplayers <= 0 GOTO resetSettings
@@ -100,6 +105,24 @@ IF host THEN
     PRINT "Host is ready!"
     IF log$ = "true" THEN
         PRINT #1, "Host is ready!"
+    END IF
+
+    IF web$ = "true" THEN
+        PRINT "Awaiting for website to connect..."
+        IF log$ = "true" THEN
+            PRINT #1, "Awaiting for website to connect..."
+        END IF
+        DO
+            web& = _OPENCONNECTION(host) ' Gets a new open connection.
+            IF web& THEN ' Checks if there was a new open connection.
+                GOTO doneWeb
+            END IF
+        LOOP
+        doneWeb:
+        PRINT "Website has been connected! Shutting down the website will shutdown the host."
+        IF log$ = "true" THEN
+            PRINT #1, "Website has been connected! Shutting down the website will shutdown the host."
+        END IF
     END IF
 
     IF discord$ = "true" THEN
@@ -350,6 +373,7 @@ IF host THEN
             IF connection&(loopnum) <> 0 THEN
                 IF _CONNECTED(connection&(loopnum)) THEN
                     '_DELAY 0.005
+                    output$ = ""
                     GET connection&(loopnum), , output$
                     output$ = _TRIM$(LEFT$(_TRIM$(output$), 69))
                     IF output$ <> "" THEN
@@ -387,6 +411,9 @@ IF host THEN
                         OPEN "data.txt" FOR OUTPUT AS #2
                         PRINT #2, output$
                         CLOSE #2
+                        IF web$ = "true" THEN
+                            PUT web&, , output$
+                        END IF
                         loopnum1 = 0
                         DO
                             loopnum1 = loopnum1 + 1
@@ -404,6 +431,66 @@ IF host THEN
             resetInputLoop:
         LOOP UNTIL loopnum >= maxplayers
         loopnum = 0
+
+        IF web$ = "true" THEN
+            IF web& <> 0 THEN
+                IF _CONNECTED(web&) THEN
+                    output$ = ""
+                    GET web&, , output$
+                    IF output$ <> "" THEN
+                        IF _FILEEXISTS("banwords.txt") THEN
+                            OPEN "banwords.txt" FOR INPUT AS #2
+                            IF EOF(2) GOTO skipbanwords1
+                            DO
+                                LINE INPUT #2, banwords$
+                                test$ = output$
+                                DO
+                                    IF LEFT$(LCASE$(test$), LEN(banwords$)) = LCASE$(banwords$) THEN
+                                        CLOSE #2
+                                        GOTO endWeb
+                                    ELSE
+                                        test$ = RIGHT$(test$, LEN(test$) - 1)
+                                    END IF
+                                LOOP UNTIL test$ = ""
+                            LOOP UNTIL EOF(2)
+                            CLOSE #2
+                        END IF
+                        skipbanwords1:
+                        'Replace output$, illegal1$, "?"
+                        'Replace output$, illegal2$, "?"
+                        illegalCharacters output$
+                        consoleoutput$ = "Website > " + output$
+                        PRINT consoleoutput$
+                        IF log$ = "true" THEN
+                            PRINT #1, consoleoutput$
+                        END IF
+                        output$ = "WEB | " + output$
+                        OPEN "data.txt" FOR OUTPUT AS #2
+                        PRINT #2, output$
+                        CLOSE #2
+                        IF web$ = "true" THEN
+                            PUT web&, , output$
+                        END IF
+                        loopnum1 = 0
+                        DO
+                            loopnum1 = loopnum1 + 1
+                            IF connection&(loopnum1) THEN ' If the connection handle exists.
+                                IF connection&(loopnum1) <> 0 THEN
+                                    IF _CONNECTED(connection&(loopnum1)) THEN ' If someone is connected in the connection handle.
+                                        PUT connection&(loopnum1), , output$
+                                    END IF
+                                END IF
+                            END IF
+                        LOOP UNTIL loopnum1 >= maxplayers
+                    END IF
+                    endWeb:
+                ELSE
+                    SYSTEM
+                END IF
+            ELSE
+                SYSTEM
+            END IF
+        END IF
 
         '_DELAY 0.005
 
@@ -424,6 +511,9 @@ IF host THEN
                 OPEN "data.txt" FOR OUTPUT AS #2
                 PRINT #2, output$
                 CLOSE #2
+                IF web$ = "true" THEN
+                    PUT web&, , output$
+                END IF
                 loopnum1 = 0
                 DO
                     loopnum1 = loopnum1 + 1
