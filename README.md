@@ -9,6 +9,7 @@ A chat program I'm making with QB64.
 * All data transmitted and logged on your servers or systems is your fault, so if anything illegal happens don't come to us about it.
 * Any issues with QB64 itself should be dealt with the proper team/developers - *not us*.
 * Mini-Chat is still in its Beta stage, so there may be bugs!
+* There might be NO more updates now, because of the inactivity. If you like to support the program, you need to learn QB64, and then you can fork the program.
 
 ### Get Started
 You can get help with the program, and information on how to set it up on our wiki page [here](https://github.com/real2two/littlechat/wiki).
