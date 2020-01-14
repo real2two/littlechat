@@ -8,10 +8,10 @@ A chat program I'm making with QB64.
 * If something breaks, it's not our fault. We'll try our best to help, but it isn't our job to make everything perfect for you.
 * All data transmitted and logged on your servers or systems is your fault, so if anything illegal happens don't come to us about it.
 * Any issues with QB64 itself should be dealt with the proper team/developers - *not us*.
-* Mini-Chat is still in its Alpha stage, so there may be bugs!
+* Mini-Chat is still in its Beta stage, so there may be bugs!
 
 ### Get Started
-You can get help with the program, and information on how to set it up on our wiki page [here](https://gitlab.com/noahmarshall12/minichat/-/wikis/home).
+You can get help with the program, and information on how to set it up on our wiki page [here](https://github.com/real2two/littlechat/wiki).
 
 ### Official Chat Server
 It has been taken down.
