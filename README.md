@@ -10,6 +10,8 @@ A chat program I'm making with QB64.
 * Any issues with QB64 itself should be dealt with the proper team/developers - *not us*.
 * Mini-Chat is still in its Beta stage, so there may be bugs!
 * There might be NO more updates now, because of the inactivity. If you like to support the program, you need to learn QB64, and then you can fork the program.
+* The folder "client" is all the client stuff and the folder "host" is all the host stuff. Windows support only (tested on Windows 10), unless you use a program like [Wine](https://www.winehq.org/) to make the .exe program work on Linux (tested on host only).
+* We are not responsible if anything bad happens. This program is not a virus. [Click here to restrict to the VirusTotal page.](https://virustotal.com/gui/file-analysis/NTE5ZGY4ZTg5ODE0Zjg5N2M0YjI3NzVmYTkzMTg4ZTM6MTU3OTAzNDI2Nw==/detection)
 
 ### Get Started
 You can get help with the program, and information on how to set it up on our wiki page [here](https://github.com/real2two/littlechat/wiki).
