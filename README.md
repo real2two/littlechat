@@ -14,13 +14,7 @@ A chat program I'm making with QB64.
 You can get help with the program, and information on how to set it up on our wiki page [here](https://gitlab.com/noahmarshall12/minichat/-/wikis/home).
 
 ### Official Chat Server
-You can use the configuration below if you want to connect to our official server.
-First 2 lines of `settings.txt`:
-```
-7319
-minichat.n4t.co
-```
-If it doesn't work, it probably means the server/host is down, contains the max amount of users or you are ip banned.
+It has been taken down.
 
 ### Discord
 If you need help, join our Discord server [here](https://discord.gg/T3qS4Y4).
